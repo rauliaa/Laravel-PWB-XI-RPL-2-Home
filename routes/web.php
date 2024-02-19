@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SPPController;
 use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +33,5 @@ Route::controller(SPPController::class)->group(function () {
 Route::view('/template','template.master');
 
 Route::resource('/spp', SPPController::class);
+
+Route::resource('/kelas', KelasController::class);

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\SPP;
+use App\Http\Requests\StoreSppsRequest;
+use App\Http\Requests\UpdateSppsRequest;
 
 class SPPController extends Controller
 {
@@ -13,9 +13,10 @@ class SPPController extends Controller
      */
     public function index()
     {
-        // fetching data dari tabel spp
-        $spps = DB::table('spps')->get();
-        // return ke view dan kirimkan data $spps
+        // Mengambil semua data SPP
+        $spps = SPP::all();
+
+        // Mengembalikan view index dengan data SPP
         return view('spp.index', compact('spps'));
     }
 
@@ -24,85 +25,61 @@ class SPPController extends Controller
      */
     public function create()
     {
-        //
+        // Mengembalikan view untuk membuat SPP baru
         return view('spp.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreSppsRequest $request)
     {
-        // validasi data inputan data wajib diisi dan minimal 5 karakter
-        $request->validate([
-            'tahun' => 'required',
-            'nominal' => 'required',
-        ]);
+        // Membuat SPP baru berdasarkan data yang diterima dari form
+        SPP::create($request->validated());
 
-        // Query untuk menyimpan data
-        $spp = new SPP();
-        $spp->tahun = $request->tahun;
-        $spp->nominal = $request->nominal;
-        $spp->save();
-
-        // Jika data disimpan maka di redirect ke halaman index
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('spp.index')->with('success', 'Data SPP berhasil ditambahkan');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id_spp)
+    public function show(SPP $spp)
     {
-        // Mengambil data SPP berdasarkan ID
-        $spp = SPP::findOrFail($id_spp);
-        
-        // Menampilkan view detail dengan data SPP yang dipilih
+        // Mengembalikan view detail dengan data SPP yang dipilih
         return view('spp.show', compact('spp'));
     }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id_spp)
+    public function edit(SPP $spp)
     {
-        // Mengambil data SPP berdasarkan ID
-        $spp = SPP::findOrFail($id_spp);
-        // Menampilkan view edit dengan data SPP yang dipilih
+        // Mengembalikan view edit dengan data SPP yang dipilih
         return view('spp.edit', compact('spp'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id_spp)
+    public function update(UpdateSppsRequest $request, SPP $spp)
     {
-        // Validasi data inputan data wajib diisi dan sesuai format
-        $request->validate([
-            'tahun' => 'required',
-            'nominal' => 'required',
-        ]);
-    
-        // Mengambil data SPP berdasarkan ID
-        $spp = SPP::findOrFail($id_spp);
-        // Update data SPP berdasarkan data yang diterima dari form
-        $spp->tahun = $request->tahun;
-        $spp->nominal = $request->nominal;
-        $spp->save();
-    
-        // Redirect ke halaman index
+        // Mengupdate data SPP berdasarkan data yang diterima dari form
+        $spp->update($request->validated());
+
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('spp.index')->with('success', 'Data SPP berhasil diupdate');
-    }    
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(SPP $spp)
     {
         // Menghapus data SPP berdasarkan ID
-        $spp = SPP::findOrFail($id);
         $spp->delete();
 
-        // Redirect ke halaman index
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('spp.index')->with('success', 'Data SPP berhasil dihapus');
     }
 }
