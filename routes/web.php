@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SPPController;
+use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,3 +29,5 @@ Route::controller(SPPController::class)->group(function () {
     Route::delete('/spp/{id}', 'destroy')->name('spp.destroy');
 });
 Route::view('/template','template.master');
+
+Route::resource('/spp', SPPController::class);
