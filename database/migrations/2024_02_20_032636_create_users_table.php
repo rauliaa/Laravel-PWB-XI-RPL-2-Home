@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('nama_petugas', 35);
+            $table->enum('level', ['admin', 'petugas'])->default("petugas");
             $table->rememberToken();
             $table->timestamps();
         });

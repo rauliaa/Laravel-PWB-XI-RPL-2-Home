@@ -13,11 +13,9 @@ class KelasController extends Controller
      */
     public function index()
     {
-        // Mengambil semua data kelas
-        $kelass = Kelas::all();
-
-        // Mengembalikan view index dengan data kelas
-        return view('kelas.index', compact('kelass'));
+        //
+        $kelas = kelas::select('id_kelas', 'nama_kelas', 'kopetensi_keahlian')->get();
+        return view('kelas.index', compact('kelas'));
     }
 
     /**
@@ -25,61 +23,49 @@ class KelasController extends Controller
      */
     public function create()
     {
-        // Mengembalikan view untuk membuat kelas baru
         return view('kelas.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreKelasRequest $request)
+    public function store(StoreKelasRequest $request, kelas $kelas)
     {
-        // Membuat kelas baru berdasarkan data yang diterima dari form
-        Kelas::create($request->validated());
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kelas.index')->with('success', 'Data Kelas berhasil ditambahkan');
+        $kelas->create($request->all());
+        return redirect()->route('kelas.index')->with(['Succes'=>'Data '.$request['nama_kelas']. 'berhasil disimpan']);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Kelas $kelas)
+    public function show(Kelas $kela)
     {
-        // Mengembalikan view detail dengan data kelas yang dipilih
-        return view('kelas.show', compact('kelas'));
+        return view ('kelas.show', compact('kela'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Kelas $kelas)
+    public function edit(Kelas $kela)
     {
-        // Mengembalikan view edit dengan data kelas yang dipilih
-        return view('kelas.edit', compact('kelas'));
+        return view ('kelas.edit', compact('kela'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateKelasRequest $request, Kelas $kelas)
+    public function update(UpdateKelasRequest $request, Kelas $kela)
     {
-        // Mengupdate data kelas berdasarkan data yang diterima dari form
-        $kelas->update($request->validated());
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kelas.index')->with('success', 'Data Kelas berhasil diupdate');
+        $kela->update($request->all());
+        return redirect()->route('kelas.index')->with(['Succes'=>'Data '.$request['kelas']. 'berhasil diedit']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kelas $kelas)
+    public function destroy(Kelas $kela)
     {
-        // Menghapus data kelas berdasarkan ID
-        $kelas->delete();
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kelas.index')->with('success', 'Data Kelas berhasil dihapus');
+        $kela->delete();
+        return redirect()->route('kelas.index')->with(['Succes'=>'Data berhasil dihapus']);
     }
 }

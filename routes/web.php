@@ -35,3 +35,5 @@ Route::view('/template','template.master');
 Route::resource('/spp', SPPController::class);
 
 Route::resource('/kelas', KelasController::class);
+
+Route::resource('/petugas', PetugasController::class);
